@@ -19,26 +19,14 @@ Method  POST
 Router.post("/signup", async (req, res) => {
   try {
     const { email, password, fullname, phoneNumber } = req.body.credentials;
-    //check whether email exists
-    const checkUserByEmail = await UserModel.findOne({ email });
-    const checkUserByPhone = await UserModel.findOne({ email });
 
-    if (checkUserByEmail || checkUserByPhone) {
-      return res.json({ error: "User already exists!" });
-    }
+    await UserModel.findByEmailAndPhone(email, phoneNumber);
 
-    //once it is encrypted - it cannot be reverted back and cannot be decrypted - for same strings, same hash code will be created.
+    //In hashing once it is encrypted - it cannot be reverted back and cannot be decrypted - for same strings, same hash code will be created.
     //so passwords can be matched by matching hash codes
 
-    //hash the password - library user is bcryptjs
-    const bcryptSalt = await bcrypt.genSalt(8); //decided the number of times the encryption will be applied
-    const hashedPassword = await bcrypt.hash(password, bcryptSalt);
-
     //savetoDB
-    await UserModel.create({
-      ...req.body.credentials,
-      password: hashedPassword,
-    });
+    await UserModel.create(req.body.credentials);
 
     //generate JWT auth token - library used is jsonwebtoken
     const token = jwt.sign({ user: { fullname, email } }, "ZomatoAPP"); //ZomatoAPP is the secret key to send the token to the user
