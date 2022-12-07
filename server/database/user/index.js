@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -14,10 +15,14 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-UserSchema.statics.findByEmailAndPhone = async (email, phoneNumber) => {
+UserSchema.methods.generateJwtToken = function () {
+  return jwt.sign({ user: this._id.toString() }, "ZomatoAPP"); //ZomatoAPP is the secret key to send the token to the user
+};
+
+UserSchema.statics.findByEmailAndPhone = async ({ email, phoneNumber }) => {
   //check whether email exists
   const checkUserByEmail = await UserModel.findOne({ email });
-  const checkUserByPhone = await UserModel.findOne({ email });
+  const checkUserByPhone = await UserModel.findOne({ phoneNumber });
 
   if (checkUserByEmail || checkUserByPhone) {
     throw new Error("User already exists!");
