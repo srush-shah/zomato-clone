@@ -31,6 +31,18 @@ UserSchema.statics.findByEmailAndPhone = async ({ email, phoneNumber }) => {
   return false;
 };
 
+UserSchema.statics.findByEmailAndPassword = async ({ email, password }) => {
+  //check whether user exists
+  const user = await UserModel.findOne({ email });
+  if (!user) throw new Error("User does not exist!");
+
+  //compare password
+  const doesPasswordMatch = await bcrypt.compare(password, user.password);
+  if (!doesPasswordMatch) throw new Error("Invalid Password!");
+
+  return user;
+};
+
 UserSchema.pre("save", function (next) {
   // pre function is used to run while in a state of mongoose. "save" indicated the state of creating a database
 
