@@ -1,7 +1,6 @@
 //Library
 import express from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import passport from "passport";
 
 //Models
 import { UserModel } from "../../database/user";
@@ -49,5 +48,39 @@ Router.post("/signin", async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 });
+
+/*
+Route   /google
+Desc    Google Sign In
+Params  none
+Access  Public
+Method  GET
+*/
+
+Router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ],
+  })
+); // provided a middleware using passport.authenticate, and added scope which defines what permissions are we providing to be accessed.
+
+/*
+Route   /google/callback 
+Desc    Google Sign In Callback
+Params  none
+Access  Public
+Method  GET
+*/
+
+Router.get(
+  "google/callback",
+  passport.authenticate("google", { failureRedirect: "/google" }),
+  (req, res) => {
+    return res.json({ token: req.session.passport.user.token });
+  }
+);
 
 export default Router;
