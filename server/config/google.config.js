@@ -22,7 +22,7 @@ export default (passport) => {
         };
         try {
           //checking if the user exists
-          const user = UserModel.findOne({ email: newUser.email });
+          const user = await UserModel.findOne({ email: newUser.email });
           if (user) {
             //generate token
             const token = user.generateJwtToken();
@@ -32,6 +32,8 @@ export default (passport) => {
           } else {
             //create new user and return
             const user = await UserModel.create(newUser);
+            //generate token
+            const token = user.generateJwtToken();
             done(null, { user, token });
           }
         } catch (error) {
