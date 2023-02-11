@@ -10,7 +10,7 @@ const Router = express.Router();
 /*
 Route   /r
 Desc    Get all food based on particular restaurant
-Params  id - restaurant id
+Params  _id
 Access  Public
 Method  GET
 */

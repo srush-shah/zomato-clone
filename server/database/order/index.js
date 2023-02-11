@@ -22,11 +22,10 @@ const OrderSchema = new mongoose.Schema(
         },
       },
     ],
-    orderRatings: { type: Number, required: true },
   },
   {
     timestamps: true,
   }
 );
 
-export const OrderModel = mongoose.model("Orders", OrderSchema);
+export const OrderModel = mongoose.model("Order", OrderSchema);
