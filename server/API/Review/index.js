@@ -5,6 +5,9 @@ import passport from "passport";
 //Database Model
 import { ReviewModel } from "../../database/allModels";
 
+//Validation
+import { ValidateReviewId, ValidateReviewObj } from "../../validation/review";
+
 const Router = express.Router();
 
 /*
@@ -17,6 +20,8 @@ Method  GET
 */
 Router.post("/new", async (req, res) => {
   try {
+    await ValidateReviewObj(req.body);
+
     const { reviewData } = req.body;
     await ReviewModel.create(reviewData);
 
