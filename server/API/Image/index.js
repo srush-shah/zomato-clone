@@ -9,6 +9,9 @@ import { ImageModel } from "../../database/allModels";
 //Utilities
 import { s3Upload } from "../../Utils/AWS/s3";
 
+//Validation
+import { ValidateImage } from "../../validation/image";
+
 const Router = express.Router();
 
 //Multer config
@@ -24,6 +27,7 @@ Method  POST
 */
 Router.post("/", upload.single("file"), async (req, res) => {
   try {
+    await ValidateImage(req.file);
     const file = req.file;
 
     //S3 bucket options
