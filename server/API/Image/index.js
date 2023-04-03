@@ -10,7 +10,7 @@ import { ImageModel } from "../../database/allModels";
 import { s3Upload } from "../../Utils/AWS/s3";
 
 //Validation
-import { ValidateImage } from "../../validation/image";
+import { ValidateImageObj } from "../../validation/image";
 
 const Router = express.Router();
 
@@ -27,7 +27,7 @@ Method  POST
 */
 Router.post("/", upload.single("file"), async (req, res) => {
   try {
-    await ValidateImage(req.file);
+    await ValidateImageObj(req.file);
     const file = req.file;
 
     //S3 bucket options
