@@ -10,6 +10,7 @@ import session from "express-session";
 
 //Config
 import googleConfig from "./config/google.config";
+import routeConfig from "./config/route.config";
 
 //Microservice routes
 import Auth from "./API/Auth";
@@ -43,6 +44,7 @@ zomato.use(passport.session());
 
 //Passport configuration
 googleConfig(passport);
+routeConfig(passport);
 
 //Application Routes
 zomato.use("/auth", Auth);
